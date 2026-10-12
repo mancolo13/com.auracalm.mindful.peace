@@ -1,127 +1,55 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
-import '../../services/routing_service.dart';
 
-class Tab3Screen extends StatefulWidget {
+class Tab3Screen extends StatelessWidget {
   const Tab3Screen({super.key});
 
   @override
-  State<Tab3Screen> createState() => _Tab3ScreenState();
-}
-
-class _Tab3ScreenState extends State<Tab3Screen> {
-  int _counter = 65;
-  bool _active = true;
-
-  @override
   Widget build(BuildContext context) {
+    final spots = [
+      {'name': 'St. Jude Emergency Center', 'dist': '0.8 km', 'time': '3 mins', 'open': '24/7 ER'},
+      {'name': 'Metropolitan General Hospital', 'dist': '1.6 km', 'time': '7 mins', 'open': '24/7 Trauma Level 1'},
+      {'name': 'Urgent Care & Trauma Clinic', 'dist': '2.4 km', 'time': '10 mins', 'open': 'Open until 23:00'},
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AuraCalm • Journal', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text('Nearest Medical Aid', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: AppTheme.surface,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.stars_rounded, color: AppTheme.primary),
-            tooltip: 'Special Registration Offer',
-            onPressed: () => RoutingService.openRegistrationUrl(),
-          ),
-        ],
       ),
-      body: SingleChildScrollView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppTheme.card,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.primary.withValues(alpha: 0.35)),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        itemCount: spots.length,
+        itemBuilder: (context, i) {
+          final s = spots[i];
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: AppTheme.card, borderRadius: BorderRadius.circular(16)),
+            child: Row(
+              children: [
+                const Icon(Icons.local_hospital, color: AppTheme.secondary, size: 28),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Journal Dashboard',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                      ),
-                      Icon(Icons.spa, color: AppTheme.primary, size: 28),
+                      Text(s['name'] as String, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                      Text('${s['dist']} • ${s['time']} drive', style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                      Text(s['open'] as String, style: const TextStyle(color: Colors.greenAccent, fontSize: 11, fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Calm',
-                    style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900, color: AppTheme.primary),
-                  ),
-                  const Text('Mind State', style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () => setState(() => _counter += 5),
-                        icon: const Icon(Icons.bolt),
-                        label: Text('Log Mood (\$_counter)'),
-                        style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary, foregroundColor: Colors.black),
-                      ),
-                      const SizedBox(width: 12),
-                      OutlinedButton.icon(
-                        onPressed: () => setState(() => _active = !_active),
-                        icon: Icon(_active ? Icons.check_circle : Icons.pause),
-                        label: Text(_active ? 'Active' : 'Paused'),
-                        style: OutlinedButton.styleFrom(foregroundColor: AppTheme.primary),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              color: AppTheme.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: AppTheme.primary.withValues(alpha: 0.2),
-                  child: const Icon(Icons.emoji_events, color: AppTheme.primary),
                 ),
-                title: const Text('Exclusive Registration Offer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: const Text('Access exclusive features and personalized rewards', style: TextStyle(fontSize: 12)),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: AppTheme.primary),
-                onTap: () => RoutingService.openRegistrationUrl(),
-              ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(backgroundColor: AppTheme.surface, foregroundColor: Colors.white),
+                  child: const Text('Route'),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.surface,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Activity Stream & Log', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 12),
-                  for (int i = 1; i <= 3; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('AuraCalm Log #$i', style: const TextStyle(color: AppTheme.textSecondary)),
-                        Text('Synced ${i * 10}m ago', style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    if (i < 3) const Divider(height: 16, color: Colors.white12),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
